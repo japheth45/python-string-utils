@@ -478,12 +478,18 @@ def slugify(input_string: str, separator: str = '-') -> str:
 
     :param input_string: String to convert.
     :type input_string: str
-    :param separator: Sign used to join string tokens (default to "-").
+    :param separator: Sign used to join string tokens (default to "-"). Must be a non-empty string.
     :type separator: str
     :return: Slug string
     """
     if not is_string(input_string):
         raise InvalidInputError(input_string)
+
+    if not is_string(separator):
+        raise InvalidInputError(separator)
+
+    if separator == '':
+        raise ValueError('separator must be a non-empty string')
 
     # replace any character that is NOT letter or number with spaces
     out = NO_LETTERS_OR_NUMBERS_RE.sub(' ', input_string.lower()).strip()

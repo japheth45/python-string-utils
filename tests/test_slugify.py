@@ -68,3 +68,20 @@ class SlugifyTestCase(TestCase):
 
     def test_slugify_removes_dash_duplicates(self):
         self.assertEqual(slugify('-hello world too--much --dashes---here--'), 'hello-world-too-much-dashes-here')
+
+    def test_slugify_rejects_empty_separator(self):
+        with self.assertRaises(ValueError) as raised:
+            slugify('hello world', separator='')
+
+        self.assertEqual(str(raised.exception), 'separator must be a non-empty string')
+
+    def test_slugify_rejects_non_string_separator(self):
+        for invalid_separator in (None, 7, ['-'], True):
+            with self.assertRaises(TypeError) as raised:
+                # noinspection PyTypeChecker
+                slugify('hello world', separator=invalid_separator)
+
+            self.assertEqual(
+                str(raised.exception),
+                'Expected "str", received "{}"'.format(type(invalid_separator).__name__)
+            )
