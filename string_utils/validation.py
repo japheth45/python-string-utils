@@ -547,8 +547,8 @@ def is_slug(input_string: Any, separator: str = '-') -> bool:
     if not is_full_string(input_string):
         return False
 
-    rex = r'^([a-z\d]+' + re.escape(separator) + r'*?)*[a-z\d]$'
-
+    rex = r'^[a-z\d]+(?:(?:' + re.escape(separator) + r')+[a-z\d]+)*$'
+    
     return re.match(rex, input_string) is not None
 
 
