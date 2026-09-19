@@ -540,10 +540,16 @@ def is_slug(input_string: Any, separator: str = '-') -> bool:
 
     :param input_string: String to check.
     :type input_string: str
-    :param separator: Join sign used by the slug.
+    :param separator: Join sign used by the slug. Must be a non-empty string.
     :type separator: str
     :return: True if slug, false otherwise.
     """
+    if not is_string(separator):
+        raise InvalidInputError(separator)
+
+    if separator == '':
+        raise ValueError('separator must be a non-empty string')
+
     if not is_full_string(input_string):
         return False
 

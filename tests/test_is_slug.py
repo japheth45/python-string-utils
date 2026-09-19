@@ -72,3 +72,19 @@ class IsSlugTestCase(TestCase):
 
     def test_slug_must_have_at_least_one_non_separator_char(self):
         self.assertFalse(is_slug('-'))
+    def test_is_slug_rejects_empty_separator(self):
+        with self.assertRaises(ValueError) as raised:
+            is_slug('hello-world', separator='')
+
+        self.assertEqual(str(raised.exception), 'separator must be a non-empty string')
+
+    def test_is_slug_rejects_non_string_separator(self):
+        for invalid_separator in (None, 7, ['-'], True):
+            with self.assertRaises(TypeError) as raised:
+                # noinspection PyTypeChecker
+                is_slug('hello-world', separator=invalid_separator)
+
+            self.assertEqual(
+                str(raised.exception),
+                'Expected "str", received "{}"'.format(type(invalid_separator).__name__)
+            )
