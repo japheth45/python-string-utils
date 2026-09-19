@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 # public api to export
 __all__ = [
     'uuid',
@@ -12,7 +10,7 @@ import binascii
 import os
 import random
 import string
-from typing import Generator
+from collections.abc import Generator
 from uuid import uuid4
 
 from .manipulation import roman_encode
@@ -104,7 +102,7 @@ def roman_range(stop: int, start: int = 1, step: int = 1) -> Generator:
     """
 
     def validate(arg_value, arg_name, allow_negative=False):
-        msg = '"{}" must be an integer in the range 1-3999'.format(arg_name)
+        msg = f'"{arg_name}" must be an integer in the range 1-3999'
 
         if not isinstance(arg_value, int):
             raise ValueError(msg)

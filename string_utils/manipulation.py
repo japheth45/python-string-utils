@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 # public api to export
 __all__ = [
     'camel_case_to_snake',
@@ -20,12 +18,23 @@ __all__ = [
 
 import base64
 import random
+import re
 import unicodedata
 import zlib
 from typing import Union
 from uuid import uuid4
 
-from ._regex import *
+from ._regex import (
+    CAMEL_CASE_REPLACE_RE,
+    EMAILS_RE,
+    HTML_RE,
+    HTML_TAG_ONLY_RE,
+    MARGIN_RE,
+    NO_LETTERS_OR_NUMBERS_RE,
+    PRETTIFY_RE,
+    SPACES_RE,
+    URLS_RE,
+)
 from .errors import InvalidInputError
 from .validation import is_snake_case, is_full_string, is_camel_case, is_integer, is_string
 
@@ -111,7 +120,7 @@ class __RomanNumbers:
             if sign in mapping:
                 return index
 
-        raise ValueError('Invalid token found: "{}"'.format(sign))
+        raise ValueError(f'Invalid token found: "{sign}"')
 
     @classmethod
     def decode(cls, input_string: str) -> int:

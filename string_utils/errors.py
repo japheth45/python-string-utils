@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from typing import Any
 
 
@@ -13,5 +11,5 @@ class InvalidInputError(TypeError):
         :param input_data: Any received object
         """
         type_name = type(input_data).__name__
-        msg = 'Expected "str", received "{}"'.format(type_name)
+        msg = f'Expected "str", received "{type_name}"'
         super().__init__(msg)

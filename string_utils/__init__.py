@@ -1,9 +1,101 @@
-# -*- coding: utf-8 -*-
-
 __version__ = '1.0.0'
 
 # makes all the functions available at `string_utils` level
 # as they were in older versions (before 1.0.0) when it was a single python module
-from .validation import *
-from .manipulation import *
-from .generation import *
+from .validation import (
+    is_string,
+    is_full_string,
+    is_number,
+    is_integer,
+    is_decimal,
+    is_url,
+    is_email,
+    is_credit_card,
+    is_camel_case,
+    is_snake_case,
+    is_json,
+    is_uuid,
+    is_ip_v4,
+    is_ip_v6,
+    is_ip,
+    is_isbn_10,
+    is_isbn_13,
+    is_isbn,
+    is_palindrome,
+    is_pangram,
+    is_isogram,
+    is_slug,
+    contains_html,
+    words_count,
+)
+from .manipulation import (
+    camel_case_to_snake,
+    snake_case_to_camel,
+    reverse,
+    shuffle,
+    strip_html,
+    prettify,
+    asciify,
+    slugify,
+    booleanize,
+    strip_margin,
+    compress,
+    decompress,
+    roman_encode,
+    roman_decode,
+)
+from .generation import (
+    uuid,
+    random_string,
+    secure_random_hex,
+    roman_range,
+)
+
+# public api of the package: the union of the public api of each module
+__all__ = [
+    # validation
+    'is_string',
+    'is_full_string',
+    'is_number',
+    'is_integer',
+    'is_decimal',
+    'is_url',
+    'is_email',
+    'is_credit_card',
+    'is_camel_case',
+    'is_snake_case',
+    'is_json',
+    'is_uuid',
+    'is_ip_v4',
+    'is_ip_v6',
+    'is_ip',
+    'is_isbn_10',
+    'is_isbn_13',
+    'is_isbn',
+    'is_palindrome',
+    'is_pangram',
+    'is_isogram',
+    'is_slug',
+    'contains_html',
+    'words_count',
+    # manipulation
+    'camel_case_to_snake',
+    'snake_case_to_camel',
+    'reverse',
+    'shuffle',
+    'strip_html',
+    'prettify',
+    'asciify',
+    'slugify',
+    'booleanize',
+    'strip_margin',
+    'compress',
+    'decompress',
+    'roman_encode',
+    'roman_decode',
+    # generation
+    'uuid',
+    'random_string',
+    'secure_random_hex',
+    'roman_range',
+]

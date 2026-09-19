@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import re
 
 # INTERNAL USE ONLY REGEX!
@@ -18,17 +16,17 @@ URLS_RAW_STRING = (
     r'(#\S*)?'  # hash
 )
 
-URL_RE = re.compile(r'^{}$'.format(URLS_RAW_STRING), re.IGNORECASE)
+URL_RE = re.compile(rf'^{URLS_RAW_STRING}$', re.IGNORECASE)
 
-URLS_RE = re.compile(r'({})'.format(URLS_RAW_STRING), re.IGNORECASE)
+URLS_RE = re.compile(rf'({URLS_RAW_STRING})', re.IGNORECASE)
 
 ESCAPED_AT_SIGN = re.compile(r'(?!"[^"]*)@+(?=[^"]*")|\\@')
 
 EMAILS_RAW_STRING = r"[a-zA-Z\d._\+\-'`!%#$&*/=\?\^\{\}\|~\\]+@[a-z\d-]+\.?[a-z\d-]+\.[a-z]{2,4}"
 
-EMAIL_RE = re.compile(r'^{}$'.format(EMAILS_RAW_STRING))
+EMAIL_RE = re.compile(rf'^{EMAILS_RAW_STRING}$')
 
-EMAILS_RE = re.compile(r'({})'.format(EMAILS_RAW_STRING))
+EMAILS_RE = re.compile(rf'({EMAILS_RAW_STRING})')
 
 CAMEL_CASE_TEST_RE = re.compile(r'^[a-zA-Z]*([a-z]+[A-Z]+|[A-Z]+[a-z]+)[a-zA-Z\d]*$')
 

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 # public api to export
 __all__ = [
     'is_string',
@@ -29,10 +27,28 @@ __all__ = [
 ]
 
 import json
+import re
 import string
-from typing import Any, Optional, List
+from typing import Any, Optional
 
-from ._regex import *
+from ._regex import (
+    CAMEL_CASE_TEST_RE,
+    CREDIT_CARDS,
+    EMAIL_RE,
+    ESCAPED_AT_SIGN,
+    HTML_RE,
+    IP_V6_RE,
+    JSON_WRAPPER_RE,
+    NUMBER_RE,
+    SHALLOW_IP_V4_RE,
+    SNAKE_CASE_TEST_DASH_RE,
+    SNAKE_CASE_TEST_RE,
+    SPACES_RE,
+    URL_RE,
+    UUID_HEX_OK_RE,
+    UUID_RE,
+    WORDS_COUNT_RE,
+)
 from .errors import InvalidInputError
 
 
@@ -174,7 +190,7 @@ def is_decimal(input_string: str) -> bool:
 
 # Full url example:
 # scheme://username:password@www.domain.com:8042/folder/subfolder/file.extension?param=value&param2=value2#hash
-def is_url(input_string: Any, allowed_schemes: Optional[List[str]] = None) -> bool:
+def is_url(input_string: Any, allowed_schemes: Optional[list[str]] = None) -> bool:
     """
     Check if a string is a valid url.
 
@@ -187,7 +203,7 @@ def is_url(input_string: Any, allowed_schemes: Optional[List[str]] = None) -> bo
     :param input_string: String to check.
     :type input_string: str
     :param allowed_schemes: List of valid schemes ('http', 'https', 'ftp'...). Default to None (any scheme is valid).
-    :type allowed_schemes: Optional[List[str]]
+    :type allowed_schemes: Optional[list[str]]
     :return: True if url, false otherwise
     """
     if not is_full_string(input_string):
@@ -244,7 +260,7 @@ def is_email(input_string: Any) -> bool:
         return False
 
 
-def is_credit_card(input_string: Any, card_type: str = None) -> bool:
+def is_credit_card(input_string: Any, card_type: Optional[str] = None) -> bool:
     """
     Checks if a string is a valid credit card number.
     If card type is provided then it checks against that specific type only,
@@ -272,7 +288,7 @@ def is_credit_card(input_string: Any, card_type: str = None) -> bool:
     if card_type:
         if card_type not in CREDIT_CARDS:
             raise KeyError(
-                'Invalid card type "{}". Valid types are: {}'.format(card_type, ', '.join(CREDIT_CARDS.keys()))
+                f'Invalid card type "{card_type}". Valid types are: {", ".join(CREDIT_CARDS.keys())}'
             )
         return CREDIT_CARDS[card_type].match(input_string) is not None
 
