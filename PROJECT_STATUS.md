@@ -92,7 +92,26 @@ The exposing tests were committed with the fix as `tests/test_slugify_round_trip
 - Commands run and observed results: `python -m unittest tests.test_slugify_round_trip` before the fix: Ran 1 test — FAILED (failures=3), all naming the `'..'` separator. After the fix: Ran 1 test — OK. Full suite after the fix: Ran 410 tests — OK.
 - Open decision recorded on the ticket: with this pattern an empty separator no longer raises inside `re`; `is_slug('hello', '')` quietly returns True, while `slugify` rejects an empty separator with `ValueError` since SUTIL-101. Whether `is_slug` should validate its separator the same way is not decided here.
 
+## SUTIL-105 — modernization pass: bug fix, refactor, packaging (done, kept as three commits)
+
+- What changed and why: SUTIL-105 asked for three kinds of change on the whole library, kept separate so the refactor can be reviewed on its own. (1) `is_slug` now validates its `separator` the way `slugify` has since SUTIL-101: a non-string raises the library's `InvalidInputError`, and an empty string raises `ValueError` with the message `separator must be a non-empty string`. Before this change `is_slug('hello-world', None)` failed inside `re` with a message that never mentioned the separator, and `is_slug('hello', '')` returned True while `slugify` rejects the same separator (the open decision recorded on SUTIL-104). (2) A behavior-preserving refactor of the `string_utils` package: the five star imports were replaced with explicit imports and `__init__.py` gained an `__all__` listing the same 42 public names; `validation.py` and `manipulation.py` now import `re` themselves instead of receiving it through a star import; `str.format` calls in the package became f-strings; `is_credit_card`'s `card_type` is annotated `Optional[str]`; `Generator` is imported from `collections.abc` and `list[str]` replaces `typing.List`; the `# -*- coding: utf-8 -*-` lines were removed. (3) Packaging: `pyproject.toml` (setuptools backend, `requires-python = ">=3.9"`, classifiers 3.9–3.14) replaces `setup.py`; `build.sh` and `MANIFEST` were deleted; `tox.ini` runs py39 through py314 with the same `python -m unittest` command.
+- Files changed: `string_utils/__init__.py`, `string_utils/_regex.py`, `string_utils/errors.py`, `string_utils/generation.py`, `string_utils/manipulation.py`, `string_utils/validation.py`; `tests/test_is_slug.py` (two new tests, in the bug-fix commit only); `pyproject.toml` (new); `tox.ini`; `setup.py`, `build.sh`, `MANIFEST` (deleted).
+- Commands run and observed results:
+  - `python -m unittest` (baseline, before any change): Ran 410 tests — OK.
+  - `python -m unittest tests.test_is_slug` (two new tests added, fix not yet applied): Ran 11 tests — FAILED (failures=2). The two new tests were seen failing.
+  - `python -m unittest` (after the fix): Ran 412 tests — OK.
+  - `python -m unittest` (after the refactor): Ran 412 tests — OK. `git status --short` showed changes under `string_utils/` only; no file under `tests/` changed.
+  - Public API surface, `sorted(n for n in dir(string_utils) if not n.startswith('_'))`, saved before the refactor and compared after: identical, 46 names (42 functions plus the four module names).
+  - `python -c "import tomllib; tomllib.load(open('pyproject.toml','rb'))"`: parses; project name `python-string-utils`, requires-python `>=3.9`.
+  - `python -W error::DeprecationWarning -m unittest` (after the modernization): Ran 412 tests — OK.
+  - Reproductions after the fix: `is_slug('hello-world', None)` ends with `InvalidInputError: Expected "str", received "NoneType"`; `is_slug('hello', '')` ends with `ValueError: separator must be a non-empty string`.
+- Not claimed: no build or install was run from `pyproject.toml`; only Python 3.14 was executed here, so compatibility with 3.9 through 3.13 is declared, not tested; the refactor was checked by reading the diff and by the three checks above, not by a second reviewer.
+- Unresolved questions:
+  - `dev.requirements.txt` pins Sphinx, twine, tox and related tools to 2019–2020 versions. Left alone because nothing in this environment can verify an update.
+  - `.travis.yml` describes a CI pipeline that no longer runs; `.readthedocs.yml` requests Python 3.5; the README badges list 3.5–3.8; `CHANGELOG.md` describes the Travis setup. All still say the old matrix.
+  - The ticket asked for a Python 3.9 floor; 3.9 reached end-of-life in October 2025. Whether the floor should be 3.10 (which would also allow `str | None` in annotations) is a product decision for the owner.
+
 ## Unresolved questions
 
-- `tox.ini` and `.travis.yml` list Python 3.5 through 3.8, but the environment runs a much newer Python and the suite passes. The project's supported-version policy is unconfirmed.
-- Release and packaging practice is unconfirmed: `setup.py` and `build.sh` exist, but current release steps have not been verified with a maintainer.
+- `.travis.yml`, `.readthedocs.yml`, the README badges, and `CHANGELOG.md` still describe the old Python 3.5–3.8 matrix and the Travis pipeline, while `tox.ini` and `pyproject.toml` now say 3.9–3.14. Whether the floor should move to 3.10 is a product decision for the owner (see SUTIL-105).
+- Release practice is still unconfirmed: `pyproject.toml` replaces `setup.py` and `build.sh`, but no build or install has been run from it, current release steps have not been verified with a maintainer, and `dev.requirements.txt` still pins 2019–2020 tool versions.

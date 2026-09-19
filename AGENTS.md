@@ -24,6 +24,7 @@ This repository provides a Python library for validating, manipulating, and gene
 - Do not add dependencies, modernize tooling, rename files, or perform cleanup outside the agreed scope.
 - Stop and ask before changing any file outside the approved scope for the current task.
 - Do not remove or weaken tests to make a failing check pass.
+- New public functions ship with a test file named for the function, in the same style as the existing tests.
 - Report commands and observed results rather than unsupported summaries.
 
 ## Definition of done
