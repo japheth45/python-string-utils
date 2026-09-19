@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "python-string-utils"
+version = "1.0.0"
+description = "Utility functions for strings validation and manipulation."
+readme = "README.md"
+requires-python = ">=3.9"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [
+    { name = "Davide Zanotti", email = "davidezanotti@gmail.com" },
+]
+keywords = ["string", "str", "utilities", "validation", "compression", "development"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Software Development :: Libraries",
+]
+
+[project.urls]
+Homepage = "https://github.com/daveoncode/python-string-utils"
+Documentation = "https://python-string-utils.readthedocs.io/en/develop"
+Changelog = "https://github.com/daveoncode/python-string-utils/blob/master/CHANGELOG.md"
+
+[tool.setuptools]
+packages = ["string_utils"]
